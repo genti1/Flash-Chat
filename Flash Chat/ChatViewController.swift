@@ -23,6 +23,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var sendButton: UIButton!
     @IBOutlet var messageTextfield: UITextField!
     @IBOutlet var messageTableView: UITableView!
+    @IBOutlet weak var backButton: UINavigationItem!
     
     
     
@@ -50,6 +51,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         configureTableView()
         retreiveMessages()
         messageTableView.separatorStyle = .none
+        backButton.setHidesBackButton(true, animated: false)
     }
 
     ///////////////////////////////////////////
@@ -145,7 +147,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             if error != nil{
                 print("Error: \(error!)")
             }else{
-                print("Message sent successfully")
                 self.messageTextfield.isEnabled = true
                 self.sendButton.isEnabled = true
                 self.messageTextfield.text = ""
@@ -166,7 +167,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.messageArray.append(message)
             self.configureTableView()
             self.messageTableView.reloadData()
-            print(text,sender)
         }
     }
     
