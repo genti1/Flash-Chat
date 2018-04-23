@@ -19,15 +19,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //TODO: Initialise and Configure your Firebase here:
         FirebaseApp.configure()
-//        let myDatabase = Database.database().reference()
-//        myDatabase.setValue("We've got data!")
-        
         return true
     }
-
     
-    
-    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        completionHandler(handleQuickAction(shortcutItem: shortcutItem))
+    }
+    func handleQuickAction(shortcutItem: UIApplicationShortcutItem) -> Bool {
+        var quickActionHandled = false
+        let type = shortcutItem.localizedTitle
+        if let shortcutType = Shortcut.init(rawValue: type){
+            switch shortcutType {
+            case .login:
+                quickActionHandled = true
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let viewController: UIViewController = storyboard.instantiateViewController(withIdentifier: "logInVC") as UIViewController
+                let rootViewController = self.window!.rootViewController as! UINavigationController
+                rootViewController.pushViewController(viewController, animated: false);
+            case .register:
+                quickActionHandled = true
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let viewController = storyboard.instantiateViewController(withIdentifier: "registrationVC")
+                let rootViewCotroller = self.window?.rootViewController as! UINavigationController
+                rootViewCotroller.pushViewController(viewController, animated: false)
+            }
+        }
+        return quickActionHandled
+    }
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -50,15 +68,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+}
 
-//MARK: - Uncomment this only once you've gotten to Step 14.
-    /*
-    
-let APP_ID = "5H62DKM7JuG6kBBzVICydweQkSQTZD8vsFtoEEew"
-let CLIENT_KEY = "UMkw6hwriImwSAEtwxlMbrJXtcccrTR6jdcRS9IN"
-    
-*/
-
-
+enum Shortcut: String {
+    case login = "Login"
+    case register = "Register"
 }
 

@@ -26,6 +26,32 @@
 	<string>NO</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>New item</key>
+			<string></string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>register</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Register</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.genti.flashchat.register</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>log-in</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Login</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.genti.flashchat.login</string>
+			<key>UIApplicationShortcutItemUserInfo</key>
+			<dict>
+				<key>key1</key>
+				<string>value1</string>
+			</dict>
+		</dict>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

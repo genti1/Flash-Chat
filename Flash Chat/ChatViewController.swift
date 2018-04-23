@@ -108,17 +108,16 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         UIView.animate(withDuration: 0.3) {
-            self.heightConstraint.constant = 308
+            self.heightConstraint.constant = 325
             self.view.layoutIfNeeded()
         }
     }
     
     
-    
     //TODO: Declare textFieldDidEndEditing here:
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 0.30) {
             self.heightConstraint.constant = 50
             self.view.layoutIfNeeded()
         }

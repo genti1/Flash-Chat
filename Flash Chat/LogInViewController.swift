@@ -29,33 +29,57 @@ class LogInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bioAuth.authenticateUser() {message in
-            if let message = message {
-                // if the completion is not nil show an alert
-                let alertView = UIAlertController(title: "Error",
-                                                  message: message,
-                                                  preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK!", style: .default)
-                alertView.addAction(okAction)
-                self.present(alertView, animated: true)
-
-            } else {
-                do {
-                    self.passwordItems = try KeychainPasswordItem.passwordItems(forService: KeychainConfiguration.serviceName, accessGroup: KeychainConfiguration.accessGroup)
+        do {
+            passwordItems = try KeychainPasswordItem.passwordItems(forService: KeychainConfiguration.serviceName, accessGroup: KeychainConfiguration.accessGroup)
+        }
+        catch {
+            fatalError("Error fetching password items - \(error)")
+        }
+        if !passwordItems.isEmpty{
+            bioAuth.authenticateUser() {message in
+                if let message = message {
+                    // if the completion is not nil show an alert
+                    let alertView = UIAlertController(title: "Error",
+                                                      message: message,
+                                                      preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK!", style: .default)
+                    alertView.addAction(okAction)
+                    self.present(alertView, animated: true)
+                    
+                } else {
+                    self.enterKeychainData()
+                    self.logInPressed(self)
                 }
-                catch {
-                    fatalError("Error fetching password items - \(error)")
-                }
-                self.enterKeychainData()
-                self.logInPressed(self)
             }
         }
+
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    @IBAction func delButtonPressed(_ sender: Any) {
+        do {
+            passwordItems = try KeychainPasswordItem.passwordItems(forService: KeychainConfiguration.serviceName, accessGroup: KeychainConfiguration.accessGroup)
+        }
+        catch {
+            fatalError("Error fetching password items - \(error)")
+        }
+        if !passwordItems.isEmpty{
+            try! passwordItems[0].deleteItem()
+            let alertView = UIAlertController(title: "Success", message: "Deleted keychain data", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK!", style: .default)
+            alertView.addAction(okAction)
+            self.present(alertView, animated: true)
+        }else{
+            print("Not removed")
+            let alertView = UIAlertController(title: "Error", message: "Nothing to delete", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK!", style: .default)
+            alertView.addAction(okAction)
+            self.present(alertView, animated: true)
+        }
+    }
     func enterKeychainData(){
         do {
             passwordItems = try KeychainPasswordItem.passwordItems(forService: KeychainConfiguration.serviceName, accessGroup: KeychainConfiguration.accessGroup)
@@ -63,13 +87,16 @@ class LogInViewController: UIViewController {
         catch {
             fatalError("Error fetching password items - \(error)")
         }
-        let passwordItem = passwordItems[0]
-        emailTextfield.text = passwordItem.account
-        do{
-            passwordTextfield.text = try passwordItem.readPassword()
-        }catch{
-            fatalError("Error getting data from keychain \(error)")
+        if !passwordItems.isEmpty{
+            let passwordItem = passwordItems[0]
+            emailTextfield.text = passwordItem.account
+            do{
+                passwordTextfield.text = try passwordItem.readPassword()
+            }catch{
+                fatalError("Error getting data from keychain \(error)")
+            }
         }
+
     }
 
    
